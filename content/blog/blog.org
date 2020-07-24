@@ -1,0 +1,466 @@
+#+ORGA_PUBLISH_KEYWORD: PUBLISHED
+#+TODO: DRAFT | PUBLISHED
+
+* Blog Ideas
+  :PROPERTIES:
+  :CREATED:  [2020-06-24 Wed 06:08]
+  :END:
+
+** DRAFT Pain to use on pdf in tablet
+  :PROPERTIES:
+  :CREATED:  [2020-06-24 Wed 06:22]
+  :END:
+
+* PUBLISHED Why You Should Start a Blog Right Now
+  CLOSED:  [2020-06-20 Sat 20:01]
+  :PROPERTIES:
+  :CREATED:  <2020-06-20 Sat 20:01>
+  :DESCRIPTION: Arguments presented for writing a blog. Also contains various references and examples
+  :END:
+  Why You Should Start a Blog Right Now - Alexey Guzey
+
+  #+BEGIN_SRC js
+  console.log("Hello")
+  #+END_SRC
+
+  https://via.hypothes.is/https://guzey.com/personal/why-have-a-blog/
+
+* PUBLISHED Annotate the internet
+  CLOSED:  [2020-07-06 Mon 20:01]
+  :PROPERTIES:
+  :CREATED:  <2020-07-06 Mon 20:01>
+  :DESCRIPTION: Use hypothes to annotate web pages and optionally share them with world. It supports pdf and epub as well
+  :END:
+  - Note taken on [2020-07-06 Mon 20:04] \\
+    Recently I have taking an interest to PKM (Person Knowledge Management)
+    To that end I have developed habit to taking notes while reading
+    Usually we take bookmarks of websites that we like
+    With Hypothesis, you can do much more
+    You can
+    - Highlight text, that is only visible to you
+    - You can annotate text (similar to highlight) and provide comments on it. You can visibility of annotations
+    - You can write down notes for current page
+    - It also has support for PDF and EPUB files
+      - Since most modern browsers can open PDF, it works out of the box
+      - For epub, you can use a online reader
+      - [[https://docdrop.org][DocDrop]] is recommended which supports all common formats and comes with Hypothesis support
+    - Use the api to automate. I'm planning to stream annotations to a org file
+
+    It boasts of strong privacy measures.
+    You need to create an account to use it, but it is quite convenient. When you think about the social aspect, everyone adding their personal comments, internet wide. It can be a powerful tool.
+    Of couse we have learned that such a tool will require moderation measure to keep trolls and mis-information in check.
+
+* PUBLISHED Building docker image across architectures
+  CLOSED: [2019-11-07 Thu 10:00]
+  :PROPERTIES:
+  :DESCRIPTION: Cross compile docker images for different architectures
+  :END:
+
+** Why it is needed
+  :PROPERTIES:
+  :CUSTOM_ID: why-it-is-needed
+  :END:
+
+  When we need to run our docker apps on a slower machine having different
+  architecture (eg raspberry pi), we can make use of more powerful machine
+  to do repetitive long running tasks like building images with every
+  change, then target machine can simply pull the built image.
+
+** Enter QEMU
+  :PROPERTIES:
+  :CUSTOM_ID: enter-qemu
+  :END:
+
+  [[https://www.qemu.org][QEMU]] is an open source processor emulator that
+  lets you run programs built for different architecture on your machine.
+
+** Install QEMU
+  :PROPERTIES:
+  :CUSTOM_ID: install-qemu
+  :END:
+
+*** Linux
+  :PROPERTIES:
+  :CUSTOM_ID: linux
+  :END:
+
+  Arch Linux
+
+  #+BEGIN_SRC bash
+    pakku -S qemu-user-static
+  #+END_SRC
+
+  Ubuntu/Debian
+
+  #+BEGIN_SRC bash
+    apt install qemu-user-static
+  #+END_SRC
+
+*** OSX
+  :PROPERTIES:
+  :CUSTOM_ID: osx
+  :END:
+
+  #+BEGIN_SRC bash
+    sudo apt install -y qemu qemu-user-static qemu-user binfmt-support
+  #+END_SRC
+
+** Register QEMU in the build agent
+  :PROPERTIES:
+  :CUSTOM_ID: register-qemu-in-the-build-agent
+  :END:
+
+  The next step is to register QEMU in the build agent. There is a Docker
+  image available that can do this for us in just one line.
+
+  #+BEGIN_SRC bash
+    docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  #+END_SRC
+
+** Copy qemu-user-static binary
+  :PROPERTIES:
+  :CUSTOM_ID: copy-qemu-user-static-binary
+  :END:
+
+  Copy the appropriate binary in the project folder. The name format for
+  binary is *qemu-$ARCH-static*.
+
+  I'll use *arm* since I'm building for raspberry pi 2 (arm7).
+
+  #+BEGIN_SRC bash
+    cp /bin/usr/qemu-arm-static <project>
+  #+END_SRC
+
+** Update dockerfile
+  :PROPERTIES:
+  :CUSTOM_ID: update-dockerfile
+  :END:
+
+  Choose appropriate base image and copy the qemu binary at /usr/bin.
+
+  Make sure qemu binary and base image have same architecture.
+
+  #+BEGIN_SRC docker
+    FROM arm32v7/debian
+
+    COPY ./qemu-arm-static /usr/bin/qemu-arm-static
+  #+END_SRC
+
+** Some Gotchas
+  :PROPERTIES:
+  :CUSTOM_ID: some-gotchas
+  :END:
+
+  Sometimes I get =format exec error= again when I try to build image. It
+  happens usually after a system restart. I simply register qemu in docker
+  build agent again and it fixes that issue.
+
+* PUBLISHED Nim Arduino
+  CLOSED: [2019-11-07 Thu 10:00]
+  :PROPERTIES:
+  :DESCRIPTION: Using nim to write arduino programs
+  :END:
+
+** Docker Instructions (optional)
+  :PROPERTIES:
+  :CUSTOM_ID: docker-instructions-optional
+  :END:
+
+*** Get Docker image
+  :PROPERTIES:
+  :CUSTOM_ID: get-docker-image
+  :END:
+
+  Get docker image from official repo - [[https://hub.docker.com/r/nimlang/nim/][Nim Docker]]
+
+  #+BEGIN_SRC bash
+    docker pull nimlang/nim
+
+    docker run -it nimlang/nim /bin/bash
+  #+END_SRC
+
+** Get Arduino tools
+  :PROPERTIES:
+  :CUSTOM_ID: get-arduino-tools
+  :END:
+
+  [[https://www.arduino.cc/download_handler.php?f=/arduino-1.8.7-linux64.tar.xz][Direct Link to 64 Bit]]
+
+  #+BEGIN_SRC bash
+    cd ~/Downloads # Wherever you downloaded tar ball
+
+    # Extract tar (it will extract to arduino-1.8.7-linux64 directory by default)
+    tar xf arduino-1.8.7-linux64.tar.xz
+  #+END_SRC
+
+  We will be using three tools that come with arduino
+
+  - avr-gcc (compiler and linker)
+  - avr-objcopy (generates hex file)
+  - avrdude (flashes hex file to arduino)
+
+  You can find them at =~/Downloads/arduino-1.8.7/hardware/tools/avr/bin=
+
+** Running code with-out arduino framework/IDE
+  :PROPERTIES:
+  :CUSTOM_ID: running-code-with-out-arduino-frameworkide
+  :END:
+
+*** Blink code in C
+  :PROPERTIES:
+  :CUSTOM_ID: blink-code-in-c
+  :END:
+
+**** led.c
+  :PROPERTIES:
+  :CUSTOM_ID: led.c
+  :END:
+
+  #+BEGIN_SRC C
+    #include <avr/io.h>
+    #include <util/delay.h>
+
+    #define BLINK_DELAY_MS 1000
+
+    int main (void)
+    {
+      /* set pin 5 of PORTB for output*/
+      DDRB |= _BV(DDB5);
+
+      while(1) {
+        /* set pin 5 high to turn led on */
+        PORTB |= _BV(PORTB5);
+        _delay_ms(BLINK_DELAY_MS);
+
+        /* set pin 5 low to turn led off */
+        PORTB &= ~_BV(PORTB5);
+        _delay_ms(BLINK_DELAY_MS);
+      }
+    }
+  #+END_SRC
+
+*** Compile and flash
+  :PROPERTIES:
+  :CUSTOM_ID: compile-and-flash
+  :END:
+
+  #+BEGIN_SRC bash
+    cd ~/Downloads/arduino-1.8.7/hardware/tools/avr/bin # Change accordingly
+
+    # Compile
+    avr-gcc -Os -DF_CPU=16000000UL -mmcu=atmega328p -c -o led.o led.c
+
+    # Link libraries (not present in this case) and produce binary
+    avr-gcc -mmcu=atmega328p led.o -o led
+
+    # Convert binary to hex
+    avr-objcopy -O ihex -R .eeprom led led.hex
+
+    # Flash hex file to arduino
+    # Change /dev/ttyACM0 to the serial port of your arduino
+    avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:led.hex
+  #+END_SRC
+
+** Using Nim
+  :PROPERTIES:
+  :CUSTOM_ID: using-nim
+  :END:
+
+  Nim needs panic override to work in embedded systems
+
+**** panicoverride.nim
+  :PROPERTIES:
+  :CUSTOM_ID: panicoverride.nim
+  :END:
+
+   #+BEGIN_SRC nim
+     proc printf(frmt: cstring) {.varargs, importc, header: "<stdio.h>", cdecl.}
+     proc exit(code: int) {.importc, header: "<stdlib.h>", cdecl.}
+
+     {.push stack_trace: off, profiler:off.}
+
+     proc rawoutput(s:string) =
+       printf("%s\n", s)
+
+     proc panic(s: string) =
+       rawoutput(s)
+       exit(1)
+
+     {.pop.}
+   #+END_SRC
+
+**** Nim Config - nim.cfg
+  :PROPERTIES:
+  :CUSTOM_ID: nim-config---nim.cfg
+  :END:
+
+  #+BEGIN_SRC nim
+    avr.standalone.gcc.path = "~/Downloads/arduino-1.8.7/hardware/tools/avr/bin"
+    avr.standalone.gcc.exe = "avr-gcc"
+    avr.standalone.gcc.linkerexe = "avr-gcc"
+
+    passC = "-Os"
+    passC = "-DF_CPU=16000000UL"
+    passC = "-mmcu=atmega328p"
+    passL = "-mmcu=atmega328p"
+
+    cpu = "avr"
+    gc = "none"
+    define = "release"
+    deadCodeElim = "on"
+    os = "standalone"
+  #+END_SRC
+
+  We need to wrap C code in functions so that they can be called by nim
+
+**** led.c
+  :PROPERTIES:
+  :CUSTOM_ID: led.c-1
+  :END:
+
+  #+BEGIN_SRC C
+    #include <avr/io.h>
+    #include <util/delay.h>
+
+    void led_setup(void) {
+      DDRB |= _BV(DDB5);
+    }
+
+    void led_on(void) {
+      PORTB |= _BV(PORTB5);
+    }
+
+    void led_off(void) {
+      PORTB &= ~_BV(PORTB5);
+    }
+
+    void delay(int ms) {
+      for (int i = 0; i < ms; i++) {
+        _delay_ms(1);
+      }
+    }
+  #+END_SRC
+
+**** Blink.nim
+  :PROPERTIES:
+  :CUSTOM_ID: blink.nim
+  :END:
+
+  #+BEGIN_SRC nim
+    {.compile: "led.c".}
+    proc led_setup(): void {.importc.}
+    proc led_on(): void {.importc.}
+    proc led_off(): void {.importc.}
+    proc delay(ms: int): void {.importc.}
+
+    when isMainModule:
+      led_setup();
+      while true:
+        led_on();
+        delay(1000);
+        led_off();
+        delay(1000);
+  #+END_SRC
+
+**** Compile blink.nim using nim compiler
+  :PROPERTIES:
+  :CUSTOM_ID: compile-blink.nim-using-nim-compiler
+  :END:
+
+  #+BEGIN_SRC bash
+    nim c blink.nim
+  #+END_SRC
+
+**** Linking doesn't work so have do it manually
+  :PROPERTIES:
+  :CUSTOM_ID: linking-doesnt-work-so-have-do-it-manually
+  :END:
+
+  #+BEGIN_SRC bash
+    ~/Downloads/arduino-1.8.7/hardware/tools/avr/bin/avr-gcc \
+        -mmcu=atmega328p \
+        -I/usr/lib/nim \
+        ~/.cache/nim/blink_d/blink.c.o \
+        ~/.cache/nim/blink_d/led.c.o \
+        ~/.cache/nim/blink_d/stdlib_system.c.o -o blink
+  #+END_SRC
+
+*** Convert to hex
+  :PROPERTIES:
+  :CUSTOM_ID: convert-to-hex
+  :END:
+
+  #+BEGIN_SRC bash
+    ~/Downloads/arduino-1.8.7/hardware/tools/avr/bin/avr-objcopy \
+        -O ihex -R .eeprom blink blink.hex
+  #+END_SRC
+
+*** Flash to arduino
+  :PROPERTIES:
+  :CUSTOM_ID: flash-to-arduino
+  :END:
+
+  #+BEGIN_SRC bash
+    ~/Downloads/arduino-1.8.7/hardware/tools/avr/bin/avrdude -F -V \
+        -c arduino \
+        -p ATMEGA328P \
+        -P /dev/ttyACM0 \
+        -b 115200 -U flash:w:blink.hex \
+        -C ~/Downloads/arduino-1.8.7/hardware/tools/avr/etc/avrdude.conf
+  #+END_SRC
+
+* PUBLISHED Setting up Raspberry Pi
+  CLOSED: [2019-01-04 Fri 10:00]
+  :PROPERTIES:
+  :DESCRIPTION: Headless setup for raspberry pi. It provides general purpose environment to build onto
+  :END:
+
+** Enable SSH
+  :PROPERTIES:
+  :CUSTOM_ID: enable-ssh
+  :END:
+
+  Enable SSH on a headless Raspberry Pi (add file to SD card on another
+  machine)
+
+  For headless setup, SSH can be enabled by *placing a file named ssh*,
+  without any extension, onto the */boot* partition of the SD card from
+  another computer. When the Pi boots, it looks for the ssh file. If it is
+  found, SSH is enabled and the file is deleted. The content of the file
+  does not matter; it could contain text, or nothing at all. If you have
+  loaded Raspbian onto a blank SD card, you will have two partitions. The
+  first one, which is the smaller one, is the boot partition. Place the
+  file into this one.
+
+** Set up environment
+  :PROPERTIES:
+  :CUSTOM_ID: set-up-environment
+  :END:
+
+  Install zsh shell, git for installing plugins and vim to edit config
+  files
+
+  #+BEGIN_SRC bash
+    sudo apt install -y zsh git vim
+  #+END_SRC
+
+  Set ZSH as default shell
+
+  #+BEGIN_SRC bash
+    sudo chsh -s "$(command -v zsh)" "${USER}"
+  #+END_SRC
+
+  Antigen is plugin manager for ZSH. Create config directory for antigen
+  and download the file there.
+
+  #+BEGIN_SRC bash
+    mkdir -p ~/.config/antigen/
+
+    curl -L git.io/antigen > ~/.config/antigen/antigen.zsh
+  #+END_SRC
+
+  Install Docker to run your apps in productive way.
+
+  #+BEGIN_SRC bash
+    curl -sSL https://get.docker.com | sh
+  #+END_SRC
