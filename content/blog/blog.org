@@ -41,13 +41,8 @@
   :CREATED:  <2020-06-20 Sat 20:01>
   :DESCRIPTION: Arguments presented for writing a blog. Also contains various references and examples
   :END:
-  Why You Should Start a Blog Right Now - Alexey Guzey
 
-  #+BEGIN_SRC js
-  console.log("Hello")
-  #+END_SRC
-
-  https://via.hypothes.is/https://guzey.com/personal/why-have-a-blog/
+  [[https://via.hypothes.is/https://guzey.com/personal/why-have-a-blog/][Why You Should Start a Blog Right Now - Alexey Guzey]]
 
 * PUBLISHED Building docker image across architectures               :docker:
   CLOSED: [2019-11-07 Thu 10:00]
