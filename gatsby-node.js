@@ -1,5 +1,6 @@
 const path = require(`path`)
-const { createFilePath } = require(`gatsby-source-filesystem`)
+const _ = require(`lodash`)
+const withDefaults = require(`./util/default-options`)
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
@@ -50,15 +51,25 @@ exports.createPages = async ({ graphql, actions }) => {
   })
 }
 
-exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions
+exports.onCreateNode = ({ node, actions }, themeOptions) => {
+  const { basePath, slug } = withDefaults(themeOptions)
+  if (node.internal.type !== `OrgContent`) return
 
-  if (node.internal.type === `OrgContent`) {
-    const value = createFilePath({ node, getNode })
-    createNodeField({
-      name: `slug`,
-      node,
-      value,
-    })
-  }
+  const { createNodeField } = actions
+  const paths = [basePath]
+    .concat(
+      slug.map(k => {
+        if (k.startsWith("$")) {
+          return _.get(node.metadata, k.substring(1))
+        }
+        return k
+      })
+    )
+    .filter(k => k)
+
+  createNodeField({
+    node,
+    name: `slug`,
+    value: path.posix.join(...paths),
+  })
 }
