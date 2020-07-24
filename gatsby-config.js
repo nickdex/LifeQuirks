@@ -35,6 +35,7 @@ module.exports = {
           "title",
           `date(formatString: "MMMM Do, YYYY")`,
           "description",
+          "tags",
         ],
       },
     },

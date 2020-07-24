@@ -1,15 +1,14 @@
 #+ORGA_PUBLISH_KEYWORD: PUBLISHED
 #+TODO: DRAFT | PUBLISHED
 
-* Blog Ideas
-  :PROPERTIES:
-  :CREATED:  [2020-06-24 Wed 06:08]
-  :END:
-
-** DRAFT Pain to use on pdf in tablet
+* DRAFT Pain to use on pdf in tablet
   :PROPERTIES:
   :CREATED:  [2020-06-24 Wed 06:22]
   :END:
+
+  - Note taken on [2020-07-24 Fri 12:40] \\
+    [[http://docdrop.org/][DocDrop]] is excellent website that comes built in support for Hypothes
+    I use it for PDFs and Epub, though it supports many more formats
 
 * PUBLISHED Annotate the internet
   CLOSED:  [2020-07-06 Mon 20:01]
@@ -50,7 +49,7 @@
 
   https://via.hypothes.is/https://guzey.com/personal/why-have-a-blog/
 
-* PUBLISHED Building docker image across architectures
+* PUBLISHED Building docker image across architectures               :docker:
   CLOSED: [2019-11-07 Thu 10:00]
   :PROPERTIES:
   :DESCRIPTION: Cross compile docker images for different architectures
@@ -155,7 +154,7 @@
   happens usually after a system restart. I simply register qemu in docker
   build agent again and it fixes that issue.
 
-* PUBLISHED Nim Arduino
+* PUBLISHED Nim Arduino                                         :nim:arduino:
   CLOSED: [2019-11-07 Thu 10:00]
   :PROPERTIES:
   :DESCRIPTION: Using nim to write arduino programs
@@ -409,7 +408,7 @@
         -C ~/Downloads/arduino-1.8.7/hardware/tools/avr/etc/avrdude.conf
   #+END_SRC
 
-* PUBLISHED Setting up Raspberry Pi
+* PUBLISHED Setting up Raspberry Pi                                     :rpi:
   CLOSED: [2019-01-04 Fri 10:00]
   :PROPERTIES:
   :DESCRIPTION: Headless setup for raspberry pi. It provides general purpose environment to build onto
