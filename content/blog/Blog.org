@@ -1,5 +1,6 @@
 #+ORGA_PUBLISH_KEYWORD: PUBLISHED
 #+TODO: DRAFT | PUBLISHED
+#+CATEGORY: blog
 
 * DRAFT Pain to use on pdf in tablet
   :PROPERTIES:
