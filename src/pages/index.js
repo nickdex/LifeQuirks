@@ -53,7 +53,7 @@ export const pageQuery = graphql`
         title
       }
     }
-    allOrgContent {
+    allOrgContent(sort: { fields: metadata___date, order: DESC }) {
       edges {
         node {
           metadata {

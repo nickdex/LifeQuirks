@@ -11,20 +11,6 @@
   :CREATED:  [2020-06-24 Wed 06:22]
   :END:
 
-* PUBLISHED Why You Should Start a Blog Right Now
-  CLOSED:  [2020-06-20 Sat 20:01]
-  :PROPERTIES:
-  :CREATED:  <2020-06-20 Sat 20:01>
-  :DESCRIPTION: Arguments presented for writing a blog. Also contains various references and examples
-  :END:
-  Why You Should Start a Blog Right Now - Alexey Guzey
-
-  #+BEGIN_SRC js
-  console.log("Hello")
-  #+END_SRC
-
-  https://via.hypothes.is/https://guzey.com/personal/why-have-a-blog/
-
 * PUBLISHED Annotate the internet
   CLOSED:  [2020-07-06 Mon 20:01]
   :PROPERTIES:
@@ -49,6 +35,20 @@
     It boasts of strong privacy measures.
     You need to create an account to use it, but it is quite convenient. When you think about the social aspect, everyone adding their personal comments, internet wide. It can be a powerful tool.
     Of couse we have learned that such a tool will require moderation measure to keep trolls and mis-information in check.
+
+* PUBLISHED Why You Should Start a Blog Right Now
+  CLOSED:  [2020-06-20 Sat 20:01]
+  :PROPERTIES:
+  :CREATED:  <2020-06-20 Sat 20:01>
+  :DESCRIPTION: Arguments presented for writing a blog. Also contains various references and examples
+  :END:
+  Why You Should Start a Blog Right Now - Alexey Guzey
+
+  #+BEGIN_SRC js
+  console.log("Hello")
+  #+END_SRC
+
+  https://via.hypothes.is/https://guzey.com/personal/why-have-a-blog/
 
 * PUBLISHED Building docker image across architectures
   CLOSED: [2019-11-07 Thu 10:00]
